@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <style>
+        .center{
+            text-align: centers;
+        }
+        .border{
+            border: 2px solid black;
+        }
+        .bt-bord{
+            border-bottom: 2px solid black;
+        }
+    </style>
+
+    <title>Welcome Page</title>
+</head>
+
+<body>
+
+    <div class="jumbotron">
+
+        <div class="container">
+            <h2>Welcome, {{result_user['first_name']}} {{result_user['last_name']}}</h2>
+
+                <div>
+                        {% with messages = get_flashed_messages() %}     <!-- declare a variable called messages -->
+                            {% if messages %}                            <!-- check if there are any messages -->
+                                {% for message in messages %}            <!-- loop through the messages -->
+                                    <p>{{message}}</p>                   <!-- display each message in a paragraph tag -->
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        <hr>
+                        
+            
+                    </div>
+                    <hr>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div>
+                        <form action='/quotes/create' method='POST'>
+                            <p>Author <input type='text' name='author_name'></p>
+                            <p>Quote <textarea rows="4" cols="50" name="quote_content"> </textarea></p>
+                            <p><input type='submit' value='Submit Quote!'></p>
+                        </form>
+                    </div>
+
+                </div>
+            
+                <div class="col-sm-6">
+                        <h3 class="center">Quotes Feed</h3>
+                        <ul class="border">
+
+
+
+                            {% for x in resultQuotes %}
+                            
+                            <li class="bt-bord">
+                                <p>{{ x['author']}}: {{x['quote_content']}}</p>
+                                <p>POSTED BY: <a href='/users/{{x["id"]}}/view'>{{x['first_name']}} {{x['last_name']}} </a> </p>
+                                <p><form action='/quotes/{{ x["quotes.id"] }}/add_like' method='POST'>
+                                        <input type='submit' value='Like/Dislike'>
+                                        <input type='hidden' value= "{{ session['userid'] }}" name="userLike">
+                                </form> </p>
+
+                                <p>
+                                {% if session['userid'] == x['user_id']: %}
+                                    <form action='/quotes/{{ x["quotes.id"] }}/delete' method='POST'>
+                                        <input type='submit' value='Delete'>
+                                        <input type='hidden' value="{{ session['userid'] }}" name='userDelete'>
+                                    </form> </p>
+                                {% endif %}
+                                <hr>
+                            </li>
+
+
+                            {% endfor %}
+                        </ul>
+
+                </div>
+            </div>
+                
+            <hr>
+            <a href='/users/logout'>Logout!</a> | <a href='/users/{{session["userid"]}}/edit'>Edit My Account</a>
+        </div>
+
+    
+    
+
+    
+
+        <hr>
+
+        
+
+
+
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+SELECT * FROM quotes_dash2.quotes;
